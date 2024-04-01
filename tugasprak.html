@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Form Validation</title>
+    <style>
+        .error {
+            color: red;
+            width: 300px;
+            text-align: center;
+            padding: 2px 10px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Belajar Javascript: Form Validation</h1>
+    <form id="formKu" name="formKu" method="get" action="proses.php">
+        <p>
+            Nama Lengkap: <input type="text" name="nama" id="nama" />
+            <span id="namaSpan"></span>
+        </p>
+        <p>
+            Username: <input type="text" name="username" id="username" />
+            <span id="usernameSpan"></span>
+        </p>
+        <p>
+            Password: <input type="password" name="pass" id="pass" />
+            <span id="passSpan"></span>
+            <label for="showPassword"></label><input type="checkbox" id="showPassword"
+                onclick="togglePasswordVisibility()">
+        </p>
+        <p>
+            Konfirmasi Password:
+            <input type="password" name="konfPass" id="konfPass" /><span id="konfPassSpan"></span>
+            <label for="showKonfPassword"></label><input type="checkbox" id="showKonfPassword"
+                onclick="toggleKonfPasswordVisibility()">
+        </p>
+        <p>
+            Email: <input type="email" name="email" id="email" />
+            <span id="emailError" class="error"></span>
+        </p>
+        <p>
+            No Telepon: <input type="tel" name="noTelp" id="noTelp" />
+            <span id="noTelpError" class="error"></span>
+        </p>
+        <p>
+            Alamat Website: <input type="text" name="website" id="website" />
+            <span id="websiteError" class="error"></span>
+        </p>
+        <p>
+            <input type="radio" id="lakiLaki" name="jenisKelamin" value="Laki-laki">
+            <label for="lakiLaki">Laki-laki</label>
+            <input type="radio" id="perempuan" name="jenisKelamin" value="Perempuan">
+            <label for="perempuan">Perempuan</label>
+            <span id="jenisKelaminError" class="error"></span>
+        </p>
+        <p>
+            <input type="submit" name="submit" id="submit" value="Kirim Data" />
+        </p>
+    </form>
+    <script>
+        let formKuNode = document.getElementById("formKu");
+
+        let usernameNode = document.getElementById("username");
+        let usernameSpanNode = document.getElementById("usernameSpan");
+
+        let namaNode = document.getElementById("nama");
+        let namaSpanNode = document.getElementById("namaSpan");
+
+        let passNode = document.getElementById("pass");
+        let passSpanNode = document.getElementById("passSpan");
+
+        let konfPassNode = document.getElementById("konfPass");
+        let konfPassSpanNode = document.getElementById("konfPassSpan");
+
+        const diProses = (e) => {
+            let isValid = true;
+
+            //===== Untuk Validasi username ==== //
+            let usernameError = "";
+
+            if (usernameNode.value.trim() === "") {
+                usernameError = "Username harus diisi";
+            } else if (/\W/.test(usernameNode.value.trim())) {
+                usernameError = "Hanya bisa diisi karakter alfanumerik";
+            } else if (usernameNode.value.trim().length < 6) {
+                usernameError = "Username minimal 6 karakter";
+            }
+
+            if (usernameError !== "") {
+                usernameSpanNode.innerHTML = usernameError;
+                usernameSpanNode.className = "error";
+                usernameNode.style.border = "2px solid red";
+                isValid = false;
+            }
+
+            //===== Untuk Validasi name ==== //
+            let nameError = "";
+
+            if (namaNode.value.trim() === "") {
+                nameError = "Nama harus diisi";
+            } else if (/\W/.test(namaNode.value.trim())) {
+                nameError = "Hanya bisa diisi karakter alfanumerik";
+            } else if (namaNode.value.trim().length < 6) {
+                nameError = "Nama minimal 6 karakter";
+            }
+
+            if (nameError !== "") {
+                namaSpanNode.innerHTML = nameError;
+                namaSpanNode.className = "error";
+                namaNode.style.border = "2px solid red";
+                isValid = false;
+            }
+
+            //===== Untuk Validasi Password ==== //
+            let passError = "";
+            if (passNode.value.trim() === "") {
+                passError = "Password harus diisi";
+            } else if (passNode.value.trim().length < 6) {
+                passError = "Password minimal 6 karakter";
+            }
+
+            if (passError !== "") {
+                passSpanNode.innerHTML = passError;
+                passSpanNode.className = "error";
+                passNode.style.border = "2px solid red";
+                isValid = false;
+            }
+
+            //===== Untuk Validasi Konfirmasi Password ==== //
+            let konfPassError = "";
+            if (konfPassNode.value.trim() === "") {
+                konfPassError = "Konfirmasi Password harus diisi";
+            } else if (konfPassNode.value.trim().length < 6) {
+                konfPassError = "Konfirmasi Password minimal 6 karakter";
+            } else if (konfPassNode.value !== passNode.value) {
+                konfPassError = "Konfirmasi Password tidak sama";
+            }
+
+            if (konfPassError !== "") {
+                konfPassSpanNode.innerHTML = konfPassError;
+                konfPassSpanNode.className = "error";
+                konfPassNode.style.border = "2px solid red";
+                isValid = false;
+            }
+
+            //===== Untuk Validasi Email ==== //
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email.value.trim())) {
+                emailError.textContent = 'Email tidak valid';
+                emailError.className = "error";
+                isValid = false;
+            } else {
+                emailError.textContent = '';
+            }
+
+            //===== Validasi No Telepon ==== //
+            const noTelp = document.getElementById('noTelp');
+            const noTelpError = document.getElementById('noTelpError');
+            const phonePattern = /^\d{10,}$/;
+            if (!phonePattern.test(noTelp.value.trim())) {
+                noTelpError.textContent = 'No Telepon tidak valid';
+                noTelpError.className = "error";
+                isValid = false;
+            } else {
+                noTelpError.textContent = '';
+            }
+
+            //===== Validasi Alamat Website ==== //
+            const website = document.getElementById('website');
+            const websiteError = document.getElementById('websiteError');
+            const websitePattern = /^(ftp|http|https):\/\/[^ "]+$/;
+            if (!websitePattern.test(website.value.trim())) {
+                websiteError.textContent = 'Alamat Website tidak valid';
+                websiteError.className = "error";
+                isValid = false;
+            } else {
+                websiteError.textContent = '';
+            }
+
+            //===== Validasi Jenis Kelamin ==== //
+            let jenisKelaminSelected = false;
+            let jenisKelaminNodes = document.querySelectorAll("input[name='jenisKelamin']");
+            let jenisKelaminErrorNode = document.getElementById("jenisKelaminError");
+            for (let i = 0; i < jenisKelaminNodes.length; i++) {
+                if (jenisKelaminNodes[i].checked) {
+                    jenisKelaminSelected = true;
+                    break;
+                }
+            }
+            if (!jenisKelaminSelected) {
+                jenisKelaminErrorNode.textContent = "Jenis Kelamin harus dipilih";
+                jenisKelaminErrorNode.className = "error";
+                isValid = false;
+            } else {
+                jenisKelaminErrorNode.textContent = "";
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        };
+
+        const hapusError = (e) => {
+            e.target.style.border = "";
+            e.target.parentElement.lastElementChild.innerHTML = "";
+        };
+
+        formKuNode.addEventListener("submit", diProses);
+        usernameNode.addEventListener("focus", hapusError);
+        namaNode.addEventListener("focus", hapusError);
+        passNode.addEventListener("focus", hapusError);
+        konfPassNode.addEventListener("focus", hapusError);
+
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('pass');
+            passInput.type === 'password' ? passInput.type = 'text' : passInput.type = 'password';
+        }
+        function toggleKonfPasswordVisibility() {
+            const passInput = document.getElementById('konfPass');
+            passInput.type === 'password' ? passInput.type = 'text' : passInput.type = 'password';
+        }
+    </script>
+</body>
+
+</html>
